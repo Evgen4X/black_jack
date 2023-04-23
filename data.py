@@ -16,10 +16,30 @@ DECK = [
     'A♠️', 'A♦️', 'A♣️', 'A♥️'
 ]
 
-def printc(*args, color=(255, 255, 255)): #GPT
-    print(f'\033[38;2;{color[0]};{color[1]};{color[2]}m')
-    print(*args)
-    print("\033[0m")
+texts = {
+    "1": ["Games to win", "Liczba gier do końca"],
+    "take": ["Take a card? ", "Wziąć kartę? "],
+    "lost": [["Player", "lost with score: "], ["Gracz", "przegrał mając punktów: "]],
+    "end": ["Game ends. Now dealer takes cards", "Koniec. Krupier bierze karty"],
+    "won": ["won!", "wygrał(y)!"],
+    "bot take": ["took a card", "wziął kartę"],
+    "player take": ["You`ve taken", "Wyciągnąłeś"],
+    "player score": ["Your score is:", "Masz punktów:"],
+    "dealer take": ["Dealer took", "Krupier wyciągnął"],
+    "dealer lost": ["Dealer lost with score:", "Krupier przegrał mając punktów:"],
+    "dealer score": ["Dealer`s score is:", "Krupier ma punktów:"],
+    "win 0": ["No one won!", "Nikt nie wygrał"],
+    "win 1": ["won!", "wygrał!"],
+    "win 2+": ["won!", "wygrali!"],
+    "total score": ["Total score:", "Podsumowanie:"],
+    "total winner": ["won the game!", "Wygrał grę!"],
+    "statistics": ["Statistics:", "Ststystyka:"]
+}
+
+def printc(*args, sep=" ", end="\n", color=(255, 255, 255)): #GPT
+    print(f'\033[38;2;{color[0]};{color[1]};{color[2]}m', end="")
+    print(*args, end="", sep=sep)
+    print("\033[0m", end=end)
 
 def count(cards:list):
     aces = 0
@@ -38,6 +58,7 @@ def count(cards:list):
     return points
 
 def is_yes(a:str):
+    a.lower()
     for el in ["ye", "ya", "sure", "oc", "ta"]:
         if el in a:
             return True
@@ -49,12 +70,19 @@ class Player:
         self._lost = False
         self._games_won = 0
         self._games_played = 0
+        self.name = "Player"
     
     def __gt__(self, other):
         return count(self.deck) > count(other.deck)
 
     def __lt__(self, other):
         return count(self.deck) < count(other.deck)
+
+    def played(self):
+        self._games_played += 1
+    
+    def won(self):
+        self._games_won += 1
     
     def take(self, global_deck:list):
         el = choice(global_deck)
@@ -62,6 +90,7 @@ class Player:
         global_deck.remove(el)
         if count(self.deck) > 21:
             self.status = True
+        return el
         
     def new_game(self):
         self.deck.clear()
@@ -78,13 +107,14 @@ class Player:
             'won': self._games_won,
             'lost': self._games_played - self._games_won,
             'played': self._games_played,
-            'rate': round(self._games_won / self._games_played * 100, 2)
+            'rate': round(self._games_won / (self._games_played if self._games_played != 0 else 1) * 100, 2)
             }
 
 class Bot(Player):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
         self.moves = -1
+        self.name = name
 
     def count_to_think(self):
         points = 0
@@ -104,5 +134,4 @@ class Bot(Player):
         danger = points
         for i in self.deck:
             if count([i]) > 8: danger -= count([i]) * (self.moves // 3 + 1) // 2
-        print(danger)
         if danger <= points * 4 // 3: return True
