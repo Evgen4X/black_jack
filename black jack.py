@@ -28,8 +28,7 @@ while all(i.get_status()["won"] < n for i in [player, p1, p2, p3]):
         printc(p.name, "-", p.get_status()["won"], color=(255, 0, 0))
     #resets
     for entity in [player, p1, p2, p3, dealer]:
-        entity.deck.clear()
-        entity.played()
+        entity.new_game()
     deck = DECK.copy()
     flag = True
     winners = list()
@@ -60,9 +59,10 @@ while all(i.get_status()["won"] < n for i in [player, p1, p2, p3]):
                     printc(texts["player take"][L], p.take(deck), color=(255, 0, 255))
                     printc(texts["player score"][L], count(p.deck), color=(127, 0, 127))
                     flag = True
-            if count(p.deck) > 21:
-                players.remove(p)
+        for p in PLAYERS: 
+            if p in players and p.status:
                 printc(texts["lost"][L][0], p.name, texts["lost"][L][1], count(p.deck), color=(255, 0, 0))
+                players.remove(p)
     printc(texts["end"][L], color=(127, 127, 127))
     if len(players) == 0:
         printc(texts["win 0"][L], color=(255, 215, 0))
@@ -74,7 +74,6 @@ while all(i.get_status()["won"] < n for i in [player, p1, p2, p3]):
     dealer_score = count(dealer.deck)
     if dealer_score > 21:
         printc(texts["dealer lost"][L], dealer_score, color=(127, 0, 0))
-        #TODO: fix loosing
         for p in players:
             p.won()
             winners.append(p.name)
