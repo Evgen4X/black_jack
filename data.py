@@ -58,7 +58,7 @@ def count(cards:list):
     return points
 
 def is_yes(a:str):
-    a.lower()
+    a = a.lower()
     for el in ["ye", "ya", "sure", "oc", "ta"]:
         if el in a:
             return True
@@ -67,7 +67,7 @@ def is_yes(a:str):
 class Player:
     def __init__(self):
         self.deck = list()
-        self._lost = False
+        self.status = False
         self._games_won = 0
         self._games_played = 0
         self.name = "Player"
@@ -77,9 +77,6 @@ class Player:
 
     def __lt__(self, other):
         return count(self.deck) < count(other.deck)
-
-    def played(self):
-        self._games_played += 1
     
     def won(self):
         self._games_won += 1
@@ -94,8 +91,8 @@ class Player:
         
     def new_game(self):
         self.deck.clear()
-        self.games_played += 1
-        self.lost = False
+        self._games_played += 1
+        self.status = False
     
     def get_status(self):
         '''
