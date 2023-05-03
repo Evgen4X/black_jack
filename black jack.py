@@ -91,13 +91,23 @@ while all(i.get_status()["won"] < n for i in [player, p1, p2, p3]):
         printc(*winners, sep=", ", end=" ", color=(255, 215, 0))
         printc(texts["win 2+"][L], color=(255, 215, 0))
 
+total_winner = []
 for p in PLAYERS:
     if p.get_status()["won"] == n:
-        total_winner = p.name
+        total_winner.append(p.name)
 
-printc(total_winner, texts["total winner"][L], color=(225, 215, 0))
+printc(*total_winner, texts["total winner"][L], color=(225, 215, 0))
 
-printc(texts["statistics"][L], color=(127, 127, 127))
 #TODO: table printing
+cols = ["won", "lost", "played", "win rate"]
+rows = []
+values = []
 for p in PLAYERS:
-    printc(p.name, ":", p.get_status(), color=[randint(100, 255) for _ in range(3)])
+    rows.append(p.name)
+    stat = p.get_status()
+    values.append([stat["won"], stat["lost"], stat["played"], stat["rate"]])
+
+table = Table(cols, rows, values, 8, texts["statistics"][L], (190, 190, 190), (0, 190, 190), (0, 190, 0), (190, 0, 0), (255, 255, 255))
+table.print_()
+
+input("Press any key to continue . . .")
