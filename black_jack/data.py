@@ -35,11 +35,11 @@ texts = {
     "total winner": ["won the game!", "Wygrał grę!"],
     "statistics": ["Statistics:", "Ststystyka:"]
 }
-
-def printc(*args, sep=" ", end="\n", color=(255, 255, 255)): #GPT
-    print(f'\033[38;2;{color[0]};{color[1]};{color[2]}m', end="")
-    print(*args, end="", sep=sep)
-    print("\033[0m", end=end)
+#ChatGPT
+def printc(*args, sep=" ", end="\n", color=(255, 255, 255)): #ChatGPT
+    print(f'\033[38;2;{color[0]};{color[1]};{color[2]}m', end="") #ChatGPT
+    print(*args, end="", sep=sep) #ChatGPT
+    print("\033[0m", end=end) #ChatGPT
 
 def count(cards:list):
     aces = 0
@@ -132,3 +132,42 @@ class Bot(Player):
         for i in self.deck:
             if count([i]) > 8: danger -= count([i]) * (self.moves // 3 + 1) // 2
         if danger <= points * 4 // 3: return True
+
+class Table:
+    def __init__(self, columns:list[any], rows:list[any], values:list[list], length, title, titlec, colc, rowc, valc, linec):
+        self.cols = self._tostr(list(columns))
+        self.rows = self._tostr(list(rows))
+        self.vals = [self._tostr(i) for i in values]
+        self.length = length
+        self.title = title
+        self.cols.insert(0, "")
+        self.n = len(self.cols) * (self.length + 1)
+        self.titlec = titlec
+        self.colc = colc
+        self.rowc = rowc
+        self.valc = valc
+        self.linec = linec
+
+    def _tostr(self, lst:list):
+        for i in range(len(lst)):
+            lst[i] = str(lst[i])
+        return lst
+
+    def _hor(self):
+        printc("─"*self.n, color=self.linec)
+    
+    def print_(self):
+        spaces = max(0, (self.n - len(self.title)) // 2)
+        printc(" "*spaces + self.title, color=self.titlec)
+        self._hor()
+        for col in self.cols:
+            printc(f"{col:<{self.length}s}", end="|", color=self.colc)
+        print()
+        self._hor()
+        for n in range(len(self.rows)):
+            printc(f"{self.rows[n]:<{self.length}s}", end="|", color=self.rowc)
+            for cell in self.vals[n]:
+                printc(f"{cell:<{self.length}s}", end="|", color=self.valc)
+            print()
+            self._hor()
+            self._hor
