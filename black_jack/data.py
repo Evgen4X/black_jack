@@ -16,13 +16,13 @@ DECK = [
     'A♠️', 'A♦️', 'A♣️', 'A♥️'
 ]
 
-texts = {
-    "1": ["Games to win", "Liczba gier do końca"],
+TEXTS = {
     "take": ["Take a card? ", "Wziąć kartę? "],
-    "lost": [["Player", "lost with score: "], ["Gracz", "przegrał mając punktów: "]],
+    "loose": [["Player", "lost with score: "], ["Gracz", "przegrał mając punktów: "]],
     "end": ["Game ends. Now dealer takes cards", "Koniec. Krupier bierze karty"],
     "won": ["won!", "wygrał(y)!"],
     "bot take": ["took a card", "wziął kartę"],
+    "bot score": ["has points:", "ma punktów:"],
     "player take": ["You`ve taken", "Wyciągnąłeś"],
     "player score": ["Your score is:", "Masz punktów:"],
     "dealer take": ["Dealer took", "Krupier wyciągnął"],
@@ -33,7 +33,19 @@ texts = {
     "win 2+": ["won!", "wygrali!"],
     "total score": ["Total score:", "Podsumowanie:"],
     "total winner": ["won the game!", "Wygrał grę!"],
-    "statistics": ["Statistics:", "Ststystyka:"]
+    "statistics": ["Statistics:", "Ststystyka:"],
+    "player": ["Player", "Gracz"],
+    "won": ["won", "wygrano"],
+    "lost": ["lost", "przegrano"],
+    "played": ["played", "zagrane"],
+    "rate": ["winning rate", "procent wygranych"],
+    "exit": ["Press ESC to exit", "Naciśnij ESC, aby zamknąć"],
+    "settings": ["To open settings, press SHIFT + CTRL", "Aby otworzyć ustawienia, naciśnij SHIFT + CTRL"],
+    "changed": ["Settings changed. Press CTRL + Q in game file to apply", "Ustawienia zmienione. Naciśnij CTRL + Q w pliku z grą, aby zastosować"],
+    "reset": ['Enter setting code to change it\nTo reset settings to defaults, type "reset"', 'Wpisz kod ustawienia, żeby go zmienić\nAby przywrócić do domyślnych ustawień, napisz "reset"'],
+    "int value": ["Enter an integer: ", "Podaj liczbę: "],
+    "bool value": ["Enter yes/no: ", "Wpisz tak/nie: "],
+    "confirm": ['Type "yes" to confirm: ', 'Napisz "tak", aby podtwierdzić: ']
 }
 #ChatGPT
 def printc(*args, sep=" ", end="\n", color=(255, 255, 255)): #ChatGPT
@@ -59,7 +71,7 @@ def count(cards:list):
 
 def is_yes(a:str):
     a = a.lower()
-    for el in ["ye", "ya", "sure", "oc", "ta"]:
+    for el in ["ye", "ta", "true", "1"]:
         if el in a:
             return True
     return False
@@ -67,7 +79,6 @@ def is_yes(a:str):
 class Player:
     def __init__(self):
         self.deck = list()
-        self.status = False
         self._games_won = 0
         self._games_played = 0
         self.name = "Player"
@@ -85,8 +96,6 @@ class Player:
         el = choice(global_deck)
         self.deck.append(el)
         global_deck.remove(el)
-        if count(self.deck) > 21:
-            self.status = True
         return el
         
     def new_game(self):
@@ -140,7 +149,6 @@ class Table:
         self.vals = [self._tostr(i) for i in values]
         self.length = length
         self.title = title
-        self.cols.insert(0, "")
         self.n = len(self.cols) * (self.length + 1)
         self.titlec = titlec
         self.colc = colc
@@ -160,11 +168,13 @@ class Table:
         spaces = max(0, (self.n - len(self.title)) // 2)
         printc(" "*spaces + self.title, color=self.titlec)
         self._hor()
+        print("|", end="")
         for col in self.cols:
             printc(f"{col:<{self.length}s}", end="|", color=self.colc)
         print()
         self._hor()
         for n in range(len(self.rows)):
+            print("|", end="")
             printc(f"{self.rows[n]:<{self.length}s}", end="|", color=self.rowc)
             for cell in self.vals[n]:
                 printc(f"{cell:<{self.length}s}", end="|", color=self.valc)
