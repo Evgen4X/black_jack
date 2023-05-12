@@ -3,29 +3,37 @@ from data import TEXTS, printc, is_yes, Table
 from keyboard import add_hotkey
 import os
 
-with open("database.json", "r", encoding="utf-8") as file:
-    data = json.load(file)
+def exit_():
+    os.startfile("start.py")
+    exit()
+
+try:
+    with open("database.json", "r", encoding="utf-8") as file:
+        data = json.load(file)
+    for i in ["Language", "Games to win", "Dealer min ponints", "Max points", "Show points", "Show bots points"]:
+        a = data[i]
+        a = data["Defaults"][i]
+except:
+    data = {"Language": "en", "Games to win": 3, "Dealer min points": 17, "Max points": 21, "Show points": True, "Show bots points": False, "Defaults": {"Language": "en", "Games to win": 3, "Dealer min points": 17, "Max points": 21, "Show points": True, "Show bots points": False}}
+    with open("database.json", "w", encoding="utf-8") as file:
+        json.dump(data, file)
 
 L = 0 if data["Language"] == "en" else 1
 CODES = {"Language": "lang", "Games to win": "win", "Dealer min points": "min", "Max points": "max", "Show points": "show points", "Show bots points": "show bots"}
-changed = False
 
 #hotkeys
-add_hotkey("Esc", exit)
-
+add_hotkey("Esc", exit_)
 while True:
     with open("database.json", "r", encoding="utf-8") as file:
         data = json.load(file)
 
     os.system("cls")
-    printc(TEXTS["exit"][L], color=(127, 127, 127))
+    printc(TEXTS["exit"][L])
 
-    if changed: printc(TEXTS["changed"][L], color=(255, 0, 0))
-
-    a = Table(["Setting", "Value", "Default", "Code"], [i for i in data.keys() if i != "Defaults"], [[data[i], data["Defaults"][i], CODES[i]] for i in data.keys() if i != "Defaults"], 17, "Settings", (255, 200, 175), (255, 0, 255), (255, 255, 0), (0, 255, 255), (255, 255, 255))
+    a = Table(["Setting", "Value", "Default", "Code"], [i for i in data.keys() if i != "Defaults"], [[data[i], data["Defaults"][i], CODES[i]] for i in data.keys() if i != "Defaults"], 17, "Settings")
     a.print_()
 
-    printc(TEXTS["reset"][L], color=(200, 150, 140))
+    printc(TEXTS["reset"][L], color="cyan")
 
     setting = input().lower()
     if "lan".startswith(setting) or setting.startswith("lan"):
@@ -58,7 +66,6 @@ while True:
     else:
         continue
 
-    changed = True
     data[setting] = value
     with open("database.json", "w", encoding="utf-8") as file:
         json.dump(data, file)
