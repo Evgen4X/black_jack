@@ -37,10 +37,6 @@ scr = SCREEN.copy()
 
 #all games
 while all(i.get_status()["won"] < SETTINGS["Games to win"] for i in [player, p1, p2, p3]):
-    # printc(TEXTS["total score"][L], color="magenta")
-    '''for p in PLAYERS:
-        printc(p.name, "-", p.get_status()["won"], color="red")
-    sleep(PAUSE)'''
     #reset
     for p in PLAYERS:
         p.new_game()
@@ -62,13 +58,10 @@ while all(i.get_status()["won"] < SETTINGS["Games to win"] for i in [player, p1,
                 if count(p.deck) < 18:
                     p.take(deck)
                     flag = True
-                    # printc(p.name, TEXTS["bot take"][L], color="green")
                     screen[CARDS[p.name]] = "█ " * len(p.deck)
                     screen[CARDS[p.name] + 1] = screen[CARDS[p.name] + 1][2:]
-                    # if SETTINGS["Show bots points"]: printc(p.name, TEXTS["bot score"][L], count(p.deck), color="magenta")
                 else:
                     screen[NAMES[p.name]] = Fore.LIGHTBLACK_EX + screen[NAMES[p.name]] + Fore.RESET
-                    # printc(f"{p.name}: pass", color="green")
                 sleep(PAUSE)
             #player
             else:
@@ -77,9 +70,11 @@ while all(i.get_status()["won"] < SETTINGS["Games to win"] for i in [player, p1,
                     card = p.take(deck)
                     screen[CARDS["Player"]] = screen[CARDS["Player"]] + card
                     screen[CARDS["Player"] + 1] = screen[CARDS["Player"] + 1][len(card):]
-                    # printc(TEXTS["player take"][L], p.take(deck), color="green")
-                    # if SETTINGS["Show points"]: printc(TEXTS["player score"][L], count(p.deck), color="magenta")
                     flag = True
+                    if SETTINGS["Show points"]:
+                        screen[43] = count(p.deck)
+                        screen[44] = SCREEN[44][len(str(count(p.deck))):]
+
         #check if a player lost
         for p in PLAYERS: 
             if p in players and count(p.deck) > SETTINGS["Max points"]:
