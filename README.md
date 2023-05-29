@@ -1,5 +1,5 @@
 # black_jack
-Black jack game (console text interface)
+Black jack game (console interface)
 Required libraries:
   - json
   - colorama

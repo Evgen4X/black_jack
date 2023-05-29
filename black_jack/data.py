@@ -163,12 +163,23 @@ TEXTS = {
     "lost": ["lost", "przegrano"],
     "played": ["played", "zagrane"],
     "rate": ["winning rate", "procent wygranych"],
+    "scoreboard": ["     SCOREBOARD\n", "       WYNIKI\n"],
     "exit": ["Press ESC to exit", "Naciśnij ESC, aby zamknąć"],
     "settings": ["To open settings, press SHIFT + CTRL", "Aby otworzyć ustawienia, naciśnij SHIFT + CTRL"],
     "reset": ['Enter setting code to change it\nTo reset settings to defaults, type "reset"', 'Wpisz kod ustawienia, żeby go zmienić\nAby przywrócić do domyślnych ustawień, napisz "reset"'],
     "int value": ["Enter an integer: ", "Podaj liczbę: "],
     "bool value": ["Enter yes/no: ", "Wpisz tak/nie: "],
-    "confirm": ['Type "yes" to confirm: ', 'Napisz "tak", aby podtwierdzić: ']
+    "confirm": ['Type "yes" to confirm: ', 'Napisz "tak", aby podtwierdzić: '],
+    "code": ["code", "kod"],
+    "setting": ["setting", "ustawienie"],
+    "value": ["value", "wartość"],
+    "default": ["default", "domyślne"],
+    "Language": ["Language", "Język"],
+    "Games to win": ["Games to win", "Gry do końca"],
+    "Dealer min points": ["Dealer min points", "Minimum krupiera"],
+    "Max points": ["Max points", "Maximum punktów"],
+    "Show points": ["Show points", "Pokazywać punkty"]
+
 }
 
 NAMES = {"Bot 1": 2, "Bot 2": 21, "Bot 3": 19, "Player": 37}

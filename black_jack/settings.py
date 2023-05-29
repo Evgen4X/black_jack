@@ -5,12 +5,12 @@ import os
 
 def exit_():
     os.startfile("start.py")
-    exit()
+    raise SystemExit
 
 try:
     with open("database.json", "r", encoding="utf-8") as file:
         data = json.load(file)
-    for i in ["Language", "Games to win", "Dealer min ponints", "Max points", "Show points"]:
+    for i in ["Language", "Games to win", "Dealer min points", "Max points", "Show points"]:
         a = data[i]
         a = data["Defaults"][i]
 except:
@@ -21,6 +21,11 @@ except:
 L = 0 if data["Language"] == "en" else 1
 CODES = {"Language": "language", "Games to win": "win", "Dealer min points": "minimum", "Max points": "maximum", "Show points": "show points"}
 
+settings = list(data.keys())
+settings.remove("Defaults")
+
+settings = [TEXTS[i][L] for i in settings]
+
 #hotkeys
 add_hotkey("Esc", exit_)
 while True:
@@ -30,7 +35,7 @@ while True:
     os.system("cls")
     printc(TEXTS["exit"][L])
 
-    a = Table(["Setting", "Value", "Default", "Code"], [i for i in data.keys() if i != "Defaults"], [[data[i], data["Defaults"][i], CODES[i]] for i in data.keys() if i != "Defaults"], 17, "Settings")
+    a = Table([TEXTS["setting"][L], TEXTS["value"][L], TEXTS["default"][L], TEXTS["code"][L]], [i for i in settings if i != "Defaults"], [[data[i], data["Defaults"][i], CODES[i]] for i in data.keys() if i != "Defaults"], 17, "Settings")
     a.print_()
 
     printc(TEXTS["reset"][L], color="cyan")

@@ -41,6 +41,7 @@ while all(i.get_status()["won"] < SETTINGS["Games to win"] for i in [player, p1,
     for p in PLAYERS:
         p.new_game()
         scr[SCORES[p.name]] = scr[SCORES[p.name]][:-1] + str(p.get_status()["won"])
+    scr[4] = TEXTS["scoreboard"][L]
     dealer.new_game()
     screen = scr.copy()
     deck = DECK.copy()
